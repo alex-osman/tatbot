@@ -1,0 +1,10 @@
+beautifulsoup4>=4.13.3
+dotenv==0.9.9
+google-api-python-client==2.161.0
+google-auth-oauthlib==1.2.1
+google-auth==2.38.0
+langchain-anthropic==0.3.7
+langgraph==0.2.74
+langsmith==0.3.10
+pydantic==2.10.6
+pytz==2025.1
