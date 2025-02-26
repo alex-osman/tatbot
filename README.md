@@ -15,8 +15,8 @@ stateDiagram
     draft_response --> verify_response
     verify_response --> should_respond : Retry
     verify_response --> sign_email
-    sign_email --> prioritize
-    prioritize --> [*] : Approve
+    sign_email --> send_email
+    send_email --> [*] : Approve
 ```
 
 ```
@@ -28,8 +28,8 @@ stateDiagram
     draft_response --> verify_response
     verify_response --> should_respond : Retry
     verify_response --> sign_email
-    sign_email --> prioritize
-    prioritize --> [*] : Approve
+    sign_email --> send_mail
+    send_mail --> [*] : Approve
 ```
 
 ## Additional Work
