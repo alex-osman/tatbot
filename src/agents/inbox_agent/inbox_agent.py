@@ -8,10 +8,11 @@ from pydantic import ValidationError
 from _config import *  # noqa: F403
 from agents.inbox_agent.types import InboxAgentOverallState
 from clients.gmail_search_client import GmailSearch
+from workflows.sign_email.sign_email import sign_email
 from workflows.draft_response.draft_response import draft_response
 from workflows.draft_response.verify_response import verify_response
 from workflows.requires_response.requires_response import should_respond_to_email
-
+from workflows.send_email.send_email import send_email
 
 class InboxAgent:
     def __init__(self):
@@ -29,6 +30,8 @@ class InboxAgent:
         workflow.add_node("should_respond", should_respond_to_email)
         workflow.add_node("draft_response", draft_response)
         workflow.add_node("verify_response", verify_response)
+        workflow.add_node("sign_email", sign_email)
+        workflow.add_node("send_email", send_email)
 
         workflow.add_edge(START, "should_respond")
 
@@ -40,17 +43,23 @@ class InboxAgent:
 
         def verify_response_logic(state: InboxAgentOverallState):
             if state.valid_response:
-                return END
+                return "sign_email"
             else:
                 return "draft_response"
 
         workflow.add_conditional_edges("should_respond", should_respond_logic)
         workflow.add_edge("draft_response", "verify_response")
         workflow.add_conditional_edges("verify_response", verify_response_logic)
-
+        workflow.add_edge("verify_response", "sign_email")
+        workflow.add_edge("sign_email", "send_email")
         graph = workflow.compile()
 
-        result = graph.invoke({"email_content": self.emails[0]["body"]})
+        print(self.emails[0]["subject"])
+        
+        result = graph.invoke({
+            "email_subject": self.emails[0]["subject"],
+            "email_content": self.emails[0]["body"],
+        })
 
         try:
             return InboxAgentOverallState(**result)

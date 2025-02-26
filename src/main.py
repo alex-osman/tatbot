@@ -12,4 +12,12 @@ class MessagesState(BaseModel):
 if __name__ == "__main__":
     draft_responses_agent = InboxAgent()
     results = draft_responses_agent.run()
-    print(results)
+
+    # Print that you started with this email:
+    print(f"Started with this email: \n{results.email_content}")
+
+    # Print that you signed this email:
+    print(f"Signed this email: \n{results.signed_email}")
+
+    # Print that you sent this email:
+    print(f"Sent this email.")

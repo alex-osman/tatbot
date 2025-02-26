@@ -6,9 +6,9 @@ from agents.inbox_agent.types import InboxAgentOverallState
 
 
 class Response(BaseModel):
-    response: str
+    signed_email: str
 
-def draft_response(state: InboxAgentOverallState) -> InboxAgentOverallState:
+def sign_email(state: InboxAgentOverallState) -> InboxAgentOverallState:
     llm = ChatAnthropic(
         model_name="claude-3-5-sonnet-20240620",
         temperature=0,
@@ -19,7 +19,9 @@ def draft_response(state: InboxAgentOverallState) -> InboxAgentOverallState:
 
     prompt_template = ChatPromptTemplate(
         [
-            ("system", "You are Jennifer (or Jen or Jenny) the assistant of Know Dice, an up and coming female tattoo artist in Philadelphia.  You are in charge of maintaining the schedule, confirming appointments, and booking new appointments.  Analyze the email thread to extract structured information, including participants, timeline, key messages, actions, context, and final outcome.  Draft a response to the email based on the information extracted. Keep it concise and make sure to cover pricing, availability/booking, and details about the tattoo such as size, colors, handpoke or machine, and location."),
+            ("system", """
+                You are an assistant that signs an email as Know Dice's assistant Jennifer.  The shop is called Lombardo and Sons Tattoo Parlor.  The address is 130 N 12th St, Philadelphia, PA 19107.  The phone number is 215-922-8888.  The email is knowdicetattoo@gmail.com.  Make certain there are no placeholders or typos in the email.
+            """),
             ("user", """
                 Here is the email content:
                 {email_content}
@@ -39,5 +41,6 @@ def draft_response(state: InboxAgentOverallState) -> InboxAgentOverallState:
         email_subject=state.email_subject,
         email_from=state.email_from,
         requires_response=state.requires_response,
-        response=response.response,
+        response=state.response,
+        signed_email=response.signed_email,
     )
