@@ -47,11 +47,12 @@ def verify_response(state: InboxAgentOverallState) -> InboxAgentOverallState:
             "response": state.response,
         })
         response = Response.model_validate(raw_response)
-
+        
         return InboxAgentOverallState(
             email_content=state.email_content,
             email_subject=state.email_subject,
             email_from=state.email_from,
+            
             response=state.response,
             valid_response=ValidResponse(
                 requires_response=True,
@@ -63,6 +64,7 @@ def verify_response(state: InboxAgentOverallState) -> InboxAgentOverallState:
             email_content=state.email_content,
             email_subject=state.email_subject,
             email_from=state.email_from,
+
             response=state.response,
             valid_response=InvalidResponse(
                 requires_response=False,

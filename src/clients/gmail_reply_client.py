@@ -16,13 +16,13 @@ class GmailReply:
         )
         self.api_resource = build("gmail", "v1", credentials=self.credentials)
 
-    def reply_to_email(self, email_subject: str, email_content: str) -> None:
-        print(email_subject)
+    def reply_to_email(self, email_from: str, email_subject: str, email_content: str) -> None:
+        print(f"Replying to {email_subject} with {email_content}")
         try:
             message = EmailMessage()
             message.set_content(email_content)
 
-            message["To"] = "alexosman@live.com"
+            message["To"] = email_from
             message["From"] = "alexosman39@gmail.com"
             message["Subject"] = email_subject
 

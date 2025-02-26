@@ -54,9 +54,8 @@ class InboxAgent:
         workflow.add_edge("sign_email", "send_email")
         graph = workflow.compile()
 
-        print(self.emails[0]["subject"])
-        
         result = graph.invoke({
+            "email_from": self.emails[0]["from"],
             "email_subject": self.emails[0]["subject"],
             "email_content": self.emails[0]["body"],
         })
