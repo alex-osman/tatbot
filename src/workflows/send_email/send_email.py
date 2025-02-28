@@ -1,18 +1,14 @@
 from pydantic import BaseModel
 
-from agents.inbox_agent.types import InboxAgentOverallState
+from agents.tattoo_booking_agent.types import TattooBookingAgentOverallState
 from clients.gmail_reply_client import GmailReply
 
-def send_email(state: InboxAgentOverallState) -> InboxAgentOverallState:
-    print(f"Sending email from {state.email_from}")
+def send_email(state: TattooBookingAgentOverallState) -> TattooBookingAgentOverallState:
+    print(f"Sending email from {state.email['from']}")
     gmail_reply = GmailReply()
-    gmail_reply.reply_to_email(state.email_from, state.email_subject, state.signed_email)
+    gmail_reply.reply_to_email(state.email, state.response)
 
-    return InboxAgentOverallState(
-        email_content=state.email_content,
-        email_subject=state.email_subject,
-        email_from=state.email_from,
-        requires_response=state.requires_response,
-        response=state.response,
-        signed_email=state.signed_email,
-    )   
+    return TattooBookingAgentOverallState(
+        email=state.email,
+        email_sent=True
+    )

@@ -1,7 +1,9 @@
+import os
+from agents.tattoo_booking_agent.tattoo_booking_agent import TattooBookingAgent
+from clients.gcal_search_client import GCalSearch
 from pydantic import BaseModel
 
 from _config import *  # noqa: F403
-from agents.inbox_agent.inbox_agent import InboxAgent
 
 
 class MessagesState(BaseModel):
@@ -12,7 +14,7 @@ class MessagesState(BaseModel):
     response: str
 
 if __name__ == "__main__":
-    draft_responses_agent = InboxAgent()
-    results = draft_responses_agent.run()
-
+    tattoo_booking_agent = TattooBookingAgent()
+    results = tattoo_booking_agent.run()
+    
     print("Done")

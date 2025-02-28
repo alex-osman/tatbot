@@ -33,7 +33,7 @@ class InboxAgent:
         workflow.add_node("sign_email", sign_email)
         workflow.add_node("send_email", send_email)
 
-        workflow.add_edge(START, "should_respond")
+        workflow.add_edge(START, "draft_response")
 
         def should_respond_logic(state: InboxAgentOverallState):
             if state.requires_response:
@@ -47,7 +47,7 @@ class InboxAgent:
             else:
                 return "draft_response"
 
-        workflow.add_conditional_edges("should_respond", should_respond_logic)
+        # workflow.add_conditional_edges("should_respond", should_respond_logic)
         workflow.add_edge("draft_response", "verify_response")
         workflow.add_conditional_edges("verify_response", verify_response_logic)
         workflow.add_edge("verify_response", "sign_email")

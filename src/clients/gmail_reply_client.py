@@ -1,5 +1,6 @@
 import base64
 from email.message import EmailMessage
+from typing import Any
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
@@ -16,19 +17,22 @@ class GmailReply:
         )
         self.api_resource = build("gmail", "v1", credentials=self.credentials)
 
-    def reply_to_email(self, email_from: str, email_subject: str, email_content: str) -> None:
-        print(f"Replying to {email_subject} with {email_content}")
+    def reply_to_email(self, email: dict[str, Any], content: str) -> None:
+        print(f"Replying to {email['subject']} with {content}")
         try:
             message = EmailMessage()
-            message.set_content(email_content)
+            message.set_content(content)
 
-            message["To"] = email_from
+            # message["To"] = email_from
+            message["To"] = "alexosman@live.com"
             message["From"] = "alexosman39@gmail.com"
-            message["Subject"] = email_subject
+            message["Subject"] = email['subject']
+            message["In-Reply-To"] = email['threadId']
+            message["References"] = email['threadId']
 
             encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
-            create_message = {"raw": encoded_message}
+            create_message = {"raw": encoded_message, "threadId": email['threadId']}
             send_message = (
                 self.api_resource.users()
                 .messages()
