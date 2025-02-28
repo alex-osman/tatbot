@@ -10,26 +10,16 @@ Below is the optimal flow for the agent.
 stateDiagram
     direction lr
     [*] --> should_respond
-    should_respond --> draft_response : Yes
+    should_respond --> extract_info : Yes
     should_respond --> [*] : No
+    extract_info --> get_gcal_appointments : FIND_DATE
+    extract_info --> book_session : BOOK_DATE
+    get_gcal_appointments --> draft_response
+    book_session --> draft_response
     draft_response --> verify_response
-    verify_response --> should_respond : Retry
-    verify_response --> sign_email
-    sign_email --> send_email
+    verify_response --> draft_response: retry
+    verify_response --> send_email
     send_email --> [*] : Approve
-```
-
-```
-stateDiagram
-    direction lr
-    [*] --> should_respond
-    should_respond --> draft_response : Yes
-    should_respond --> [*] : No
-    draft_response --> verify_response
-    verify_response --> should_respond : Retry
-    verify_response --> sign_email
-    sign_email --> send_mail
-    send_mail --> [*] : Approve
 ```
 
 ## Additional Work
